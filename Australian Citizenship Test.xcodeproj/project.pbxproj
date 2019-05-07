@@ -8,22 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		9505ECB722819AD00065B2A3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9505ECB622819AD00065B2A3 /* AppDelegate.swift */; };
-		9505ECB922819AD00065B2A3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9505ECB822819AD00065B2A3 /* ViewController.swift */; };
+		9505ECB922819AD00065B2A3 /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9505ECB822819AD00065B2A3 /* MainVC.swift */; };
 		9505ECBC22819AD00065B2A3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9505ECBA22819AD00065B2A3 /* Main.storyboard */; };
 		9505ECBF22819AD00065B2A3 /* Australian_Citizenship_Test.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9505ECBD22819AD00065B2A3 /* Australian_Citizenship_Test.xcdatamodeld */; };
 		9505ECC122819AD20065B2A3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9505ECC022819AD20065B2A3 /* Assets.xcassets */; };
 		9505ECC422819AD20065B2A3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9505ECC222819AD20065B2A3 /* LaunchScreen.storyboard */; };
+		9505ECCF22819DA10065B2A3 /* ExamVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9505ECCE22819DA10065B2A3 /* ExamVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9505ECB322819AD00065B2A3 /* Australian Citizenship Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Australian Citizenship Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9505ECB622819AD00065B2A3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9505ECB822819AD00065B2A3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9505ECB822819AD00065B2A3 /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		9505ECBB22819AD00065B2A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9505ECBE22819AD00065B2A3 /* Australian_Citizenship_Test.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Australian_Citizenship_Test.xcdatamodel; sourceTree = "<group>"; };
 		9505ECC022819AD20065B2A3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9505ECC322819AD20065B2A3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9505ECC522819AD20065B2A3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9505ECCE22819DA10065B2A3 /* ExamVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +58,40 @@
 		9505ECB522819AD00065B2A3 /* Australian Citizenship Test */ = {
 			isa = PBXGroup;
 			children = (
+				9505ECCB22819AF00065B2A3 /* Model */,
+				9505ECCC22819AFE0065B2A3 /* View */,
+				9505ECCD22819B080065B2A3 /* Controller */,
 				9505ECB622819AD00065B2A3 /* AppDelegate.swift */,
-				9505ECB822819AD00065B2A3 /* ViewController.swift */,
-				9505ECBA22819AD00065B2A3 /* Main.storyboard */,
 				9505ECC022819AD20065B2A3 /* Assets.xcassets */,
 				9505ECC222819AD20065B2A3 /* LaunchScreen.storyboard */,
 				9505ECC522819AD20065B2A3 /* Info.plist */,
 				9505ECBD22819AD00065B2A3 /* Australian_Citizenship_Test.xcdatamodeld */,
 			);
 			path = "Australian Citizenship Test";
+			sourceTree = "<group>";
+		};
+		9505ECCB22819AF00065B2A3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9505ECCC22819AFE0065B2A3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9505ECBA22819AD00065B2A3 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		9505ECCD22819B080065B2A3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9505ECB822819AD00065B2A3 /* MainVC.swift */,
+				9505ECCE22819DA10065B2A3 /* ExamVC.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,9 +165,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9505ECB922819AD00065B2A3 /* ViewController.swift in Sources */,
+				9505ECB922819AD00065B2A3 /* MainVC.swift in Sources */,
 				9505ECB722819AD00065B2A3 /* AppDelegate.swift in Sources */,
 				9505ECBF22819AD00065B2A3 /* Australian_Citizenship_Test.xcdatamodeld in Sources */,
+				9505ECCF22819DA10065B2A3 /* ExamVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
