@@ -15,45 +15,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        // Location of Realm
-        //print(Realm.Configuration.defaultConfiguration.fileURL!)
-        
         loadRealmInstance()
-        
-        
-        //let config = Realm.Configuration(fileURL: Bundle.main.url(forResource: "default", withExtension: "realm"), readOnly: false)
-        //let realm = try! Realm(configuration: config)
-
         return true
     }
 
     private func loadRealmInstance() {
-        let defaultPath = Realm.Configuration.defaultConfiguration.fileURL!.path
         let bundledPath = Bundle.main.path(forResource: "act", ofType: "realm")
-        let fileSize = try! FileManager.default.attributesOfItem(atPath: defaultPath)[FileAttributeKey.size] as! Int
-        print ("Pichai: FileSize is \(fileSize)" )
-        print ("Path: \(defaultPath)")
+        let defaultPath = Realm.Configuration.defaultConfiguration.fileURL!.path.replacingOccurrences(of: "default", with: "act")
+        //print ("Path: \(defaultPath)")
         
-        // if !FileManager.default.fileExists(atPath: defaultPath!), let bundledPath = path {
-        if fileSize < 300000 {
+        let actFileSize = try! FileManager.default.attributesOfItem(atPath: defaultPath)[FileAttributeKey.size] as! Int
+
+        if actFileSize < 300000 {
             do {
                 try FileManager.default.removeItem(atPath: defaultPath)
-                try FileManager.default.copyItem(atPath: bundledPath!, toPath: defaultPath.replacingOccurrences(of: "default", with: "act"))
+                try FileManager.default.copyItem(atPath: bundledPath!, toPath: defaultPath)
                 } catch {
                     print("Error copying pre-populated Realm Database\(error)")
                 }
                 //exit(0) // Restart the application to re-connect to the newly loaded database instance
             }
-
-           _ = try! Realm()
-
-        print ("PICHAI AFTER REALM()")
-
     }
-    
-    
-   
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

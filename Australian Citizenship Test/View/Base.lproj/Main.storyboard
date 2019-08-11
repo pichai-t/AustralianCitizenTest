@@ -9,6 +9,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Font Awesome 5 Free-Regular-400.otf">
+            <string>FontAwesome5Free-Regular</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Australian Citizenship Test-->
         <scene sceneID="tne-QT-ifu">
@@ -27,7 +32,8 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="58" id="6is-e0-krL"/>
                                         </constraints>
-                                        <state key="normal" title="     Exam">
+                                        <fontDescription key="fontDescription" name="FontAwesome5Free-Regular" family="Font Awesome 5 Free" pointSize="17"/>
+                                        <state key="normal" title="Exam">
                                             <color key="titleColor" red="0.88884602820000003" green="0.31681467029999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </state>
                                         <connections>
@@ -40,17 +46,19 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="58" id="crO-wI-YTY"/>
                                         </constraints>
-                                        <state key="normal" title="    Review Mistakes">
+                                        <fontDescription key="fontDescription" name="FontAwesome5Free-Regular" family="Font Awesome 5 Free" pointSize="17"/>
+                                        <state key="normal" title="Mistakes">
                                             <color key="titleColor" red="0.88884602820000003" green="0.31681467029999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uYK-xM-bsH">
                                         <rect key="frame" x="5" y="156" width="404" height="58"/>
-                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="58" id="XZh-J1-xK8"/>
                                         </constraints>
-                                        <state key="normal" title="     Information">
+                                        <fontDescription key="fontDescription" name="FontAwesome5Free-Regular" family="Font Awesome 5 Free" pointSize="17"/>
+                                        <state key="normal" title="Information">
                                             <color key="titleColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                         </state>
                                     </button>
@@ -120,6 +128,9 @@
                     <navigationItem key="navigationItem" title="Australian Citizenship Test" id="YlX-bc-aLB"/>
                     <connections>
                         <outlet property="circularProgress" destination="cG6-Rz-3Tp" id="koK-ip-pP5"/>
+                        <outlet property="outExamBtn" destination="XRk-7d-Id9" id="yIa-cR-bna"/>
+                        <outlet property="outInformationBtn" destination="uYK-xM-bsH" id="zPZ-24-5yA"/>
+                        <outlet property="outMistakesBtn" destination="kNV-UR-vtI" id="Pko-sq-lCB"/>
                         <outlet property="percentageProgress" destination="dUZ-VX-01H" id="TIk-oN-4aR"/>
                         <outlet property="textProgress" destination="BBP-zK-iHh" id="tyh-P9-EgR"/>
                     </connections>

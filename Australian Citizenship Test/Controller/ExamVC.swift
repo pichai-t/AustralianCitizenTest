@@ -12,8 +12,6 @@ import SVProgressHUD
 import ChameleonFramework
 
 class ExamVC: UIViewController {
-    
-    let MAX_QUESTION_SET = 14
 
     var realm = try! Realm()
 
@@ -48,13 +46,14 @@ class ExamVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let defaultPath = Realm.Configuration.defaultConfiguration.fileURL?.path
-        let config = Realm.Configuration(fileURL: URL(string: defaultPath!.replacingOccurrences(of: "default", with: "act")), readOnly: false)
+        let defaultPath = Realm.Configuration.defaultConfiguration.fileURL?.path.replacingOccurrences(of: "default", with: "act")
+        let config = Realm.Configuration(fileURL: URL(string: defaultPath!), readOnly: false)
         realm = try! Realm(configuration: config)
+        
         setupUiPara()      // Setup UI and Parameters
         loadQuestions()    // Load questions into cache
         loadScore()        // Load initial score
-        showNextQuestion() // Show the first question
+        showNextUnanswerQuestion() // Show the first question
     }
     
     
@@ -103,11 +102,10 @@ class ExamVC: UIViewController {
     
     private func loadQuestions() {
         questions = realm.objects(ExamBank.self).filter("questionSet = \(currQuestionSet)").sorted(byKeyPath: "id", ascending: true)
-        guard questions.count > 0 else { fatalError("No Questions in Database for this question Set: \(currQuestionSet)" )
+        guard questions.count > 0 else { fatalError("No Questions in Database for this question Set: \(currQuestionSet)" ) }
         questionCount = questions.count
         questionIndex = questions[0].id - 1
         questionSet = questions[0].questionSet
-        }
     }
     
     private func loadScore() {
@@ -235,9 +233,7 @@ class ExamVC: UIViewController {
             let statusTable = realm.objects(Status.self)
                 try! realm.write {
                     if let statusT = statusTable.first {
-                        if statusT.currQuestionSet <= MAX_QUESTION_SET {
-                            statusT.currQuestionSet = statusT.currQuestionSet + 1
-                        }
+                       statusT.currQuestionSet = statusT.currQuestionSet + 1
                     }
                 }
         } else {

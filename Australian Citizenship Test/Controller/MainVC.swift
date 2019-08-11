@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import KYCircularProgress
+import FontAwesome_swift
 
 class MainVC: UIViewController {
 
@@ -16,11 +17,14 @@ class MainVC: UIViewController {
     @IBOutlet weak var percentageProgress: UILabel!
     @IBOutlet weak var textProgress: UILabel!
     
+    @IBOutlet weak var outExamBtn: UIButton!
+    @IBOutlet weak var outMistakesBtn: UIButton!
+    @IBOutlet weak var outInformationBtn: UIButton!
+    
     var realm = try! Realm()
     var scores : Results<Score>!
     var StatusTable : Results<Status>!
     var currQuestionSet : Int = 1;
-    let MAX_QUESTION_SET = 14
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +32,23 @@ class MainVC: UIViewController {
         let config = Realm.Configuration(fileURL: URL(string: defaultPath!.replacingOccurrences(of: "default", with: "act")), readOnly: false)
         realm = try! Realm(configuration: config)
         loadCurrentQuestionSet()
+        setFontUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         drawCircular()
+    }
+    
+    func setFontUI() {
+        // Texts on Buttons
+        outExamBtn.titleLabel?.font = UIFont.fontAwesome(ofSize: 22, style: .regular)
+        outExamBtn.setTitle("\u{f044} Exam", for: .normal)
+        
+        outMistakesBtn.titleLabel?.font = UIFont.fontAwesome(ofSize: 22, style: .regular)
+        outMistakesBtn.setTitle("\u{f057} Mistakes", for: .normal)
+        
+        outInformationBtn.titleLabel?.font = UIFont.fontAwesome(ofSize: 22, style: .regular)
+        outInformationBtn.setTitle("Information", for: .normal)
     }
     
     private func loadCurrentQuestionSet() {
@@ -39,8 +56,6 @@ class MainVC: UIViewController {
         // Setup "Current Question Set" - if not, 1 is the default.
         if let stat = StatusTable.first {
             currQuestionSet = stat.currQuestionSet
-        } else {
-            currQuestionSet = 1
         }
     }
     
@@ -71,10 +86,10 @@ class MainVC: UIViewController {
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        
+        // For Seque of "gotoExamVC" only
         if identifier == "gotoExamVC" {
             // guard currQuestionSet <= MAX_QUESTION_SET, else Alert then terminated.
-            if currQuestionSet > MAX_QUESTION_SET  {
+            if currQuestionSet > Para.MAX_QUESTION_SET  {
                 let alert = UIAlertController(title: "You have finished all tests", message: "Click OK to close", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
                     self.navigationController?.popViewController(animated: true)
@@ -85,10 +100,8 @@ class MainVC: UIViewController {
         }
         return true
     }
-    
-    
-}
 
+}
 
 
 // Constant variables
@@ -98,6 +111,7 @@ fileprivate extension MainVC {
         static let QuestionPerSet : Float = 20.0
         static let LowerScoreTier : Float = 0.40
         static let MiddleScoreTier : Float = 0.75
+        static let MAX_QUESTION_SET : Int = 14
     }
     
 
