@@ -19,7 +19,11 @@
 		9518E08A22F83E2700C62326 /* act.realm in Resources */ = {isa = PBXBuildFile; fileRef = 9518E08922F83E2600C62326 /* act.realm */; };
 		952B431A22E43C4500AEDB23 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 952B431922E43C4500AEDB23 /* CircularProgressView.swift */; };
 		953E802622A2BAEB00C7B2B1 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953E802522A2BAEB00C7B2B1 /* Score.swift */; };
+		954DADEF23084B0D004238D5 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954DADEE23084B0D004238D5 /* ChartView.swift */; };
+		954DADF123084C77004238D5 /* ScoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954DADF023084C77004238D5 /* ScoreVC.swift */; };
+		954DADF323084D13004238D5 /* ScoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 954DADF223084D13004238D5 /* ScoreData.swift */; };
 		95AAC21C2286D48200FD39B2 /* ExamBank.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95AAC21B2286D48200FD39B2 /* ExamBank.swift */; };
+		95CD36FD232C837B00BC34BB /* BaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95CD36FC232C837B00BC34BB /* BaseProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,7 +42,11 @@
 		9518E08922F83E2600C62326 /* act.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = act.realm; sourceTree = "<group>"; };
 		952B431922E43C4500AEDB23 /* CircularProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressView.swift; sourceTree = "<group>"; };
 		953E802522A2BAEB00C7B2B1 /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
+		954DADEE23084B0D004238D5 /* ChartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		954DADF023084C77004238D5 /* ScoreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreVC.swift; sourceTree = "<group>"; };
+		954DADF223084D13004238D5 /* ScoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreData.swift; sourceTree = "<group>"; };
 		95AAC21B2286D48200FD39B2 /* ExamBank.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamBank.swift; sourceTree = "<group>"; };
+		95CD36FC232C837B00BC34BB /* BaseProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseProtocol.swift; sourceTree = "<group>"; };
 		C694410F6BA093F75452EDBA /* Pods_Australian_Citizenship_Test.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Australian_Citizenship_Test.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -92,6 +100,7 @@
 				95AAC21B2286D48200FD39B2 /* ExamBank.swift */,
 				953E802522A2BAEB00C7B2B1 /* Score.swift */,
 				95051FC622D20F89007755BE /* Status.swift */,
+				954DADF223084D13004238D5 /* ScoreData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -99,6 +108,8 @@
 		9505ECCC22819AFE0065B2A3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				952B431922E43C4500AEDB23 /* CircularProgressView.swift */,
+				954DADEE23084B0D004238D5 /* ChartView.swift */,
 				9505ECBA22819AD00065B2A3 /* Main.storyboard */,
 				9505ECC222819AD20065B2A3 /* LaunchScreen.storyboard */,
 			);
@@ -111,7 +122,8 @@
 				9505ECB622819AD00065B2A3 /* AppDelegate.swift */,
 				9505ECB822819AD00065B2A3 /* MainVC.swift */,
 				9505ECCE22819DA10065B2A3 /* ExamVC.swift */,
-				952B431922E43C4500AEDB23 /* CircularProgressView.swift */,
+				954DADF023084C77004238D5 /* ScoreVC.swift */,
+				95CD36FC232C837B00BC34BB /* BaseProtocol.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -223,9 +235,11 @@
 				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/FontAwesome.swift/FontAwesome_swift.framework",
 				"${BUILT_PRODUCTS_DIR}/KYCircularProgress/KYCircularProgress.framework",
+				"${BUILT_PRODUCTS_DIR}/Macaw/Macaw.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/SWXMLHash/SWXMLHash.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
@@ -234,9 +248,11 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FontAwesome_swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KYCircularProgress.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Macaw.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SWXMLHash.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -277,8 +293,12 @@
 				952B431A22E43C4500AEDB23 /* CircularProgressView.swift in Sources */,
 				95051FC722D20F89007755BE /* Status.swift in Sources */,
 				9505ECB722819AD00065B2A3 /* AppDelegate.swift in Sources */,
+				954DADF123084C77004238D5 /* ScoreVC.swift in Sources */,
+				95CD36FD232C837B00BC34BB /* BaseProtocol.swift in Sources */,
+				954DADEF23084B0D004238D5 /* ChartView.swift in Sources */,
 				9505ECBF22819AD00065B2A3 /* Australian_Citizenship_Test.xcdatamodeld in Sources */,
 				9505ECCF22819DA10065B2A3 /* ExamVC.swift in Sources */,
+				954DADF323084D13004238D5 /* ScoreData.swift in Sources */,
 				953E802622A2BAEB00C7B2B1 /* Score.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

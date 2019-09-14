@@ -17,21 +17,7 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="Qrp-x5-gLW">
-                                <rect key="frame" x="62" y="20" width="250" height="343"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Qrp-x5-gLW" secondAttribute="height" multiplier="250:343" id="luh-2a-SKU"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="Qrp-x5-gLW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="62" id="1RB-QC-kqk"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Qrp-x5-gLW" secondAttribute="trailing" constant="63" id="Pkr-Ak-40s"/>
-                            <constraint firstItem="Qrp-x5-gLW" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="lza-6Q-1u2"/>
-                        </constraints>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
@@ -40,7 +26,4 @@
             <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="logo" width="1200" height="1200"/>
-    </resources>
 </document>

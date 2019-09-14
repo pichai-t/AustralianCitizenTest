@@ -28,6 +28,6 @@ class ExamBank: Object {
     
     // History
     @objc dynamic var passedOrFailed: Int = 0
-    // 1 = pass, 2 = fail
+    // 1 = pass, 2 = fail, 0 = never tried
     
 }

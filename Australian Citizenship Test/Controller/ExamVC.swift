@@ -13,17 +13,25 @@ import ChameleonFramework
 
 class ExamVC: UIViewController {
 
-    var realm = try! Realm()
+    var displayMode : String? // Either "Exam" or "Mistakes" Mode
+    
+    // 0. Database
+    lazy var defaultPath = Realm.Configuration.defaultConfiguration.fileURL?.path.replacingOccurrences(of: "default", with: "act")
+    lazy var config = Realm.Configuration(fileURL: URL(string: defaultPath!), readOnly: false)
+    lazy var realm = try! Realm(configuration: config)
 
     // 1. ExamBank Table
     var questions : Results<ExamBank>!
     var questionCount : Int?
-    var questionSet : Int? {
+    var questionSet : Int = 1 {
         willSet {
-            lblExam.text = "Exam: \(newValue ?? 1)"
+            if (newValue == -1) {
+                lblExam.text = ""
+            } else {
+                lblExam.text = "Exam: \(newValue)"
+            }
         }
     }
-    
     var questionIndex : Int?
     var correctAnswer : Int?
     var selectedAnswer : Int? // We can add DidSet here to update Score in Score table
@@ -34,42 +42,43 @@ class ExamVC: UIViewController {
     var currScore : Int = 0  // We can update lblScore.txt when currScore has changed.
     {
         willSet {
-            lblScore.text = "Score: \(newValue)"
+            if (newValue == -1) {
+                lblScore.text = ""
+            } else {
+                lblScore.text = "Score: \(newValue)"
+            }
         }
     }
     
-    // 3. Score Table
+    // 3. Status Table
     var StatusTable : Results<Status>!
-    var currQuestionSet : Int = 1
     
     // View Did Load function
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUiPara(displayMode!)      // Setup UI and Parameters
         
-        let defaultPath = Realm.Configuration.defaultConfiguration.fileURL?.path.replacingOccurrences(of: "default", with: "act")
-        let config = Realm.Configuration(fileURL: URL(string: defaultPath!), readOnly: false)
-        realm = try! Realm(configuration: config)
+        if (loadQuestions(displayMode!)) {         // Load questions into cache
+            loadScore(displayMode!)
+            showNextUnanswerQuestion(displayMode!) // Show the first question
+        }
         
-        setupUiPara()      // Setup UI and Parameters
-        loadQuestions()    // Load questions into cache
-        loadScore()        // Load initial score
-        showNextUnanswerQuestion() // Show the first question
     }
     
-    
     // M E T H O D S
-    private func setupUiPara() {
+    private func setupUiPara(_ displayMode : String) {
+
         // SETUP UI
         // Set Background color (gradient)
-        let colors:[UIColor] = [UIColor.flatYellow, UIColor.flatGreen]
-        view.backgroundColor = GradientColor(.topToBottom, frame: view.frame, colors: colors)
+        let colorsExamMode:[UIColor] = [UIColor.flatYellow, UIColor.flatGreen]
+        let colorsMistakesMode:[UIColor] = [UIColor.flatBlue, UIColor.flatGreen]
         
-        // Question Set
-        if let nav = self.navigationController?.navigationBar {
-           let qSetFrame = CGRect(x: (nav.frame.width)-120, y: 0, width: (nav.frame.width/2), height: (nav.frame.height))
-           let txtQuestionSet = UILabel(frame: qSetFrame)
-           txtQuestionSet.text = "Set 1"
-           /// nav.addSubview(txtQuestionSet)
+        if (displayMode == "Exam" ) {
+            view.backgroundColor = GradientColor(.topToBottom, frame: view.frame, colors: colorsExamMode)
+        } else {
+            view.backgroundColor = GradientColor(.topToBottom, frame: view.frame, colors: colorsMistakesMode)
+            lblNextUnanswered.isHidden = true
+            lblExam.isHidden = true
         }
         
         // Questions
@@ -90,9 +99,9 @@ class ExamVC: UIViewController {
         StatusTable = realm.objects(Status.self)
         // Setup "Current Question Set" - if not, 1 is the default.
         if let stat = StatusTable.first {
-            currQuestionSet = stat.currQuestionSet
+            questionSet = stat.currQuestionSet   // ** used to be currQuestionSet
         } else {
-            currQuestionSet = 1
+            questionSet = 1   // ** used to be currQuestionSet
         }
         
         // SET SVProgressHUD
@@ -100,38 +109,57 @@ class ExamVC: UIViewController {
         SVProgressHUD.setBackgroundColor(UIColor.flatSand)
     }
     
-    private func loadQuestions() {
-        questions = realm.objects(ExamBank.self).filter("questionSet = \(currQuestionSet)").sorted(byKeyPath: "id", ascending: true)
-        guard questions.count > 0 else { fatalError("No Questions in Database for this question Set: \(currQuestionSet)" ) }
-        questionCount = questions.count
-        questionIndex = questions[0].id - 1
-        questionSet = questions[0].questionSet
+    private func loadQuestions(_ displayMode : String) -> Bool {
+        if displayMode == "Exam" {
+            questions = realm.objects(ExamBank.self).filter("questionSet = \(questionSet)").sorted(byKeyPath: "id", ascending: true)
+            guard questions.count > 0 else { fatalError("No Questions in Database for this question Set: \(questionSet)" ) }
+            questionCount = questions.count
+            questionIndex = questions[0].id - 1
+            questionSet = questions[0].questionSet
+        } else if displayMode == "Mistakes" {
+            questions = realm.objects(ExamBank.self).filter("passedOrFailed = 2").sorted(byKeyPath: "questionSet", ascending: true).sorted(byKeyPath: "id", ascending: true)
+            guard questions.count > 0 else { print("No Questions in Database for this question Set: \(questionSet)" )
+                return false // If question.count = 0
+            }
+            questionCount = questions.count
+            questionIndex = questions[0].id - 1
+            questionSet = questions[0].questionSet
+        }
+        return true
     }
     
-    private func loadScore() {
+    private func loadScore(_ displayMode : String) {
+        guard displayMode == "Exam" else {
+            questionSet = -1
+            currScore = -1
+            return
+        }
+
         if let stat = StatusTable.first {
-            currQuestionSet = stat.currQuestionSet
+            questionSet = stat.currQuestionSet
         }
         
-        ScoreTable = realm.objects(Score.self).filter("questionSet = \(currQuestionSet)")
+        ScoreTable = realm.objects(Score.self).filter("questionSet = \(questionSet)")
         if let sc = ScoreTable.first {
             currScore = sc.score
-        } else { currScore = 0 }
+        } else {
+            currScore = 0
+        }
+        
     }
     
     private func showNextQuestion() {
         showTargetedQuestion(targetedID: questionIndex! + 1)
     }
     
-    private func showNextUnanswerQuestion() {
+    private func showNextUnanswerQuestion(_ displayMode : String) {
         // Find the next Question to load.
-        let nextQuestionToLoad = getNextUnanswered()
-        // If not found?
+        let nextQuestionToLoad : Int = (displayMode == "Mistakes") ? 0 : getNextUnanswered()
         showTargetedQuestion(targetedID: nextQuestionToLoad)
     }
     
     private func getNextUnanswered() -> Int {
-        questions = realm.objects(ExamBank.self).filter("questionSet = \(currQuestionSet)").sorted(byKeyPath: "id", ascending: true)
+        questions = realm.objects(ExamBank.self).filter("questionSet = \(questionSet)").sorted(byKeyPath: "id", ascending: true)
         var intReturn = questionCount;  // Default value is the last question (aka questionCount)
         for n in 0..<questions.count {
             if (questions[n].selectedAns == 0) {
@@ -139,7 +167,7 @@ class ExamVC: UIViewController {
                 break
             }
         }
-        return intReturn!;
+        return intReturn!
     }
     
     private func showTargetedQuestion(targetedID : Int) {
@@ -207,6 +235,8 @@ class ExamVC: UIViewController {
     @IBOutlet weak var answer4: UIButton!
     @IBOutlet weak var lblExam: UILabel!
     @IBOutlet weak var lblScore: UILabel!
+    @IBOutlet weak var lblNextUnanswered: UIButton!
+    
     
     // I B - A C T I O N S
     @IBAction func answer1(_ sender: UIButton) {
@@ -223,7 +253,7 @@ class ExamVC: UIViewController {
     }
     
     @IBAction func btnNextUnanswered(_ sender: UIButton) {
-        showNextUnanswerQuestion()
+        showNextUnanswerQuestion(displayMode!)
     }
     
     func finishCurrQuestionSet() {
@@ -242,7 +272,7 @@ class ExamVC: UIViewController {
     }
     
     func areAllQuestionAnswerred() -> Bool {
-        questions = realm.objects(ExamBank.self).filter("questionSet = \(currQuestionSet)").sorted(byKeyPath: "id", ascending: true)
+        questions = realm.objects(ExamBank.self).filter("questionSet = \(questionSet)").sorted(byKeyPath: "id", ascending: true)
         var boolReturn = true
         for n in 0..<questions.count {
             if (questions[n].selectedAns == 0) {
@@ -255,21 +285,22 @@ class ExamVC: UIViewController {
     
     func saveAnswer (_ sd : UIButton) {
         // ExamBank Table - to save answer
-        let currQuestion = realm.objects(ExamBank.self).filter("questionSet = %@", questionSet!).filter("id = %@", questionIndex!)
+        let currQuestion = realm.objects(ExamBank.self).filter("questionSet = %@", questionSet).filter("id = %@", questionIndex!)
         if let currQ = currQuestion.first {
             try! realm.write {
                 currQ.selectedAns = sd.tag
+                currQ.passedOrFailed = (currQ.selectedAns == currQ.correctAns) ? 1 : 2   //1 is Pass and 2 is Failed
             }
         }
         
         // Score Table - to save score
-        let scoreTable = realm.objects(Score.self).filter("questionSet = %@", questionSet!)
+        let scoreTable = realm.objects(Score.self).filter("questionSet = %@", questionSet)
         try! realm.write {
             if let scoreT = scoreTable.first {
                 scoreT.score = currScore
             } else {
                 let sc = Score()
-                sc.questionSet = questionSet!
+                sc.questionSet = questionSet
                 sc.score = currScore
                 realm.add(sc)
             }
@@ -278,9 +309,8 @@ class ExamVC: UIViewController {
     
     // set Color Red or Green for Incorrect or Correct choice
     func checkAnswer(_ sd : UIButton) {
-        
         if (sd.tag == correctAnswer) {
-            // CORRECT ANSWER !!
+            // CORRECT ANSWER:
             SVProgressHUD.showSuccess(withStatus: "Correct!")
             
             if sd.backgroundColor != .green {
@@ -297,7 +327,7 @@ class ExamVC: UIViewController {
                 self.showNextQuestion()
             }
         } else {
-            // WRONG ANSWER !!
+            // WRONG ANSWER:
             SVProgressHUD.showError(withStatus: "Incorrect")
             // Reset all previous color
             resetAllChoicesColor()
@@ -376,10 +406,4 @@ class ExamVC: UIViewController {
         return nil
     }
 
-}  // Used to be Line 429
-
-// Uncomment the following line to preserve selection between presentations
-// self.clearsSelectionOnViewWillAppear = false
-
-// Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-// self.navigationItem.rightBarButtonItem = self.editButtonItem
+}  // Used to be Line 409

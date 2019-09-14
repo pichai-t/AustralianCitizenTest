@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class Score  : Object {
+class Score : Object {
     // Score of each QuestionSet!
     @objc dynamic var questionSet : Int = 1
     @objc dynamic var score : Int = 0

@@ -22,10 +22,11 @@ class MainVC: UIViewController {
     @IBOutlet weak var outInformationBtn: UIButton!
     
     var realm = try! Realm()
+    var questions : Results<ExamBank>!
     var scores : Results<Score>!
     var StatusTable : Results<Status>!
     var currQuestionSet : Int = 1;
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let defaultPath = Realm.Configuration.defaultConfiguration.fileURL?.path
@@ -33,6 +34,7 @@ class MainVC: UIViewController {
         realm = try! Realm(configuration: config)
         loadCurrentQuestionSet()
         setFontUI()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,7 +50,10 @@ class MainVC: UIViewController {
         outMistakesBtn.setTitle("\u{f057} Mistakes", for: .normal)
         
         outInformationBtn.titleLabel?.font = UIFont.fontAwesome(ofSize: 22, style: .regular)
-        outInformationBtn.setTitle("Information", for: .normal)
+        outInformationBtn.setTitle("\u{f080} Scores", for: .normal)
+        
+        // Reference:
+        // Colour Palettes: https://colorpalettes.net/color-palette-4026/
     }
     
     private func loadCurrentQuestionSet() {
@@ -97,9 +102,29 @@ class MainVC: UIViewController {
                 self.present(alert, animated: true, completion: nil)
                 return false
             }
+        } else if (identifier == "gotoMistakes") {
+            
+            questions = realm.objects(ExamBank.self).filter("passedOrFailed = 2").sorted(byKeyPath: "questionSet", ascending: true).sorted(byKeyPath: "id", ascending: true)
+            guard questions.count > 0 else { print("No Questions in Database for this question Set: \(currQuestionSet)" )
+                return false // If question.count = 0
+            }
+            
         }
+        
         return true
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //var vc2: ExamVC = segue.destination as! ExamVC
+        if (segue.identifier == "gotoExamVC") {
+            var vc1 : ExamVC = segue.destination as! ExamVC
+            vc1.displayMode = "Exam"
+        } else if (segue.identifier == "gotoMistakes") {
+            var vc2 : ExamVC = segue.destination as! ExamVC
+            vc2.displayMode = "Mistakes"
+        }
+    }
+
 
 }
 
@@ -113,8 +138,6 @@ fileprivate extension MainVC {
         static let MiddleScoreTier : Float = 0.75
         static let MAX_QUESTION_SET : Int = 14
     }
-    
-
 
 }
 
